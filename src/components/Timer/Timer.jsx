@@ -1,144 +1,118 @@
-// import React, { useState, useEffect } from 'react';
-// import styles from './Timer.module.scss';
-
-// const Timer = () => {
-
-//     const [seconds, setSeconds] = useState('00');
-//     const [minutes, setMinutes] = useState('00');
-//     const [hours, setHours] = useState('00');
-//     const [isActive, setIsActive] = useState(false);
-//     const [counter, setCounter] = useState(3655)
-
-//     const handleStart = () => {
-//         setIsActive(true)
-//     }
-//     const handleStop = () => {
-//         setIsActive(false)
-//         setCounter(0);
-//         setSeconds('00');
-//         setMinutes('00')
-//     }
-
-//     useEffect(() => {
-//     let intervalId;
-
-//     if (isActive) {
-//       intervalId = setInterval(() => {
-//         const secondCounter = counter % 60;
-//         let minuteCounter = Math.floor(counter / 60);
-//         const hourCounter = Math.floor(counter / 3600);
-//         const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter;
-//         const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: (minuteCounter < 60 ? minuteCounter : `0${minuteCounter}` );
-        
-       
-//         const computedHour = String(hourCounter).length === 1 ? `0${hourCounter}`: hourCounter;
-
-//         setSeconds(computedSecond);
-//         setMinutes(computedMinute);
-//         setHours(computedHour);
-
-//         setCounter(counter => counter + 1);
-//       }, 1000)
-//     }
-
-//     return () => clearInterval(intervalId);
-//   }, [isActive, counter])
-
-
-//     return (
-//         <div className={styles.Wrapper}>
-//             <div className={styles.Timer}>
-//                 <div>
-//                     <p>{hours}</p>
-//                     <h2>HH</h2>
-//                 </div>
-//                 <div>
-//                     <p>{minutes}</p>
-//                     <h2>MM</h2>
-//                 </div>
-//                 <div>
-//                     <p>{seconds}</p>
-//                     <h2>SS</h2>
-//                 </div>
-//             </div>
-//             <div className={styles.ControlPanel}>
-//                 <button onClick={handleStart}>Start</button>
-//                 <button onClick={handleStop}>Stop</button>
-//             </div>
-//         </div>
-//     )
-// }
-
-// export default Timer;
 import React, { useState, useEffect } from 'react';
 import styles from './Timer.module.scss';
 
 const Timer = () => {
 
-  const [timerHours, setTimerHours] = useState();
-  const [timerMinutes, setTimerMinutes] = useState();
-  const [timerSeconds, setTimerSeconds] = useState();
+  const TIME_BETWEEN_CLICKS = 300;
 
-  let interval;
+  //State for timer
+  const [seconds, setSeconds] = useState('00');
+  const [minutes, setMinutes] = useState('00');
+  const [hours, setHours] = useState('00');
+  const [isActive, setIsActive] = useState(false);
+  const [counter, setCounter] = useState(0);
 
-  const startTimer = () => {
-    const countDownDate = new Date("May 30,2021 ").getTime();
+  // State for wait between clicks
+  const [waitCounter, setWaitCounter] = useState(0);
+  const [isActiveWait, setIsActiveWait] = useState(false);
+  const [amountClick, setAmountClick] = useState(0);
 
-    interval = setInterval(() => {
-      const now = new Date().getTime();
+  const handleStart = () => {
+      setIsActive(true);
+  }
+  const handleStop = () => {
+      setIsActive(false);
+      setIsActiveWait(false);
+      setWaitCounter(0);
+      setCounter(0);
+      setSeconds('00');
+      setMinutes('00');
+      setHours('00');
+  }
 
-      const distance = countDownDate - now;
+  const handleWait = () => {
+    setAmountClick(amountClick => amountClick + 1)
+    if (amountClick >= 1 && waitCounter < TIME_BETWEEN_CLICKS) {
+      setIsActive(false);
+    }
+    setIsActiveWait(true);
+  }
+  const handleReset = () => {
+    setCounter(0);
+    setSeconds('00');
+    setMinutes('00');
+    setHours('00');
+    setIsActive(true)
+  }
 
-      const hours = Math.floor(
-        (distance % (24 * 60 * 60 * 1000)) / (1000 * 60 * 60)
-      );
-      const minutes = Math.floor((distance % (60 * 60 * 1000)) / (1000 * 60));
-      const seconds = Math.floor((distance % (60 * 1000)) / 1000);
+  // Interval between clicks
+  useEffect(() => {
+    let intervalBetweenClicks;
+    if (isActiveWait) {
+      intervalBetweenClicks = setInterval(() => {
+        setWaitCounter(waitCounter => waitCounter + 10);
+        if (waitCounter > TIME_BETWEEN_CLICKS) {
+          setWaitCounter(0);
+          setAmountClick(0);
+        } 
+      }, 10)
+    }
+    return () => clearInterval(intervalBetweenClicks);
+  }, [isActiveWait, waitCounter, amountClick])
 
-      if (distance < 0) {
-        // Stop Timer
+  // Timer interval
+  useEffect(() => {
+    let timerInterval;
+    if (isActive) {
+      timerInterval = setInterval(() => {
+        const secondsCounter = Math.floor(counter % 3600 % 60);
+        const minutesCounter = Math.floor(counter % 3600 / 60);
+        const hoursCounter = Math.floor(counter / 3600);
+        const calculatedSeconds = String(secondsCounter).length === 1 ? `0${secondsCounter}`: secondsCounter;
+        const calculatedMinutes = String(minutesCounter).length === 1 ? `0${minutesCounter}`: minutesCounter;
+        const calculatedHours = String(hoursCounter).length === 1 ? `0${hoursCounter}`: hoursCounter;
+        setSeconds(calculatedSeconds);
+        setMinutes(calculatedMinutes);
+        setHours(calculatedHours);
+        setCounter(counter => counter + 1);
+      }, 1000)
+    }
+    return () => clearInterval(timerInterval);
+  }, [isActive, counter])
 
-        clearInterval(interval.current);
-      } else {
-        // Update Timer
-        setTimerHours(hours);
-        setTimerMinutes(minutes);
-        setTimerSeconds(seconds);
-      }
-    });
-  };
-
-
- useEffect(() => {
-    startTimer();
-  });
-
-
-
-
-
-    return (
-        <div className={styles.Wrapper}>
-            <div className={styles.Timer}>
-                <div>
-                    <p>{timerHours}</p>
-                    <h2>HH</h2>
-                </div>
-                <div>
-                    <p>{timerMinutes}</p>
-                    <h2>MM</h2>
-                </div>
-                <div>
-                    <p>{timerSeconds}</p>
-                    <h2>SS</h2>
-                </div>
+  return (
+    <div className={styles.Wrapper}>
+        <h2 className={styles.Title}>Timer</h2>
+        <div className={styles.Timer}>
+            <div className={styles.Item}>
+                <p>{hours}</p>
+                <h2>Hours</h2>
             </div>
-            <div className={styles.ControlPanel}>
-                <button onClick={startTimer}>Start</button>
-                {/* <button onClick={handleStop}>Stop</button> */}
+            <div className={styles.Item}>
+                <p>{minutes}</p>
+                <h2>Minutes</h2>
+            </div>
+            <div className={styles.Item}>
+                <p>{seconds}</p>
+                <h2>Seconds</h2>
             </div>
         </div>
-    )
+        <div className={styles.ControlPanel}>
+          <div >
+            <button className={styles.ButtonStart} onClick={handleStart}>Start</button>
+          </div>
+          <div>
+            <button className={styles.ButtonStop} onClick={handleStop}>Stop</button>
+          </div>
+          <div>
+            <button className={styles.ButtonWait} onClick={handleWait}>Wait</button>
+          </div>
+          <div>
+            <button className={styles.ButtonReset} onClick={handleReset}>Reset</button>
+          </div>
+        </div>
+    </div>
+  )
 }
 
 export default Timer;

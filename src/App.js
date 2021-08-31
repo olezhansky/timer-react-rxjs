@@ -1,11 +1,12 @@
-import Timer from "./components/Timer/Timer";
-
+import Timer from './components/Timer/Timer';
+import TimerRxJS from './components/TimerRxJS/TimerRxJS';
+import './index.scss';
 
 function App() {
   return (
-    <div className="App">
-        <h1>Hello React</h1>
-        <Timer />
+    <div className='App'>
+      <Timer />
+      <TimerRxJS />
     </div>
   );
 }
