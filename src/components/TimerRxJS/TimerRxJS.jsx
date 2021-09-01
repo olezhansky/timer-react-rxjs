@@ -7,19 +7,20 @@ import styles from './TimerRxJS.module.scss';
 const TimerRxJS = () => {
 
   const TIME_BETWEEN_CLICKS = 300;
-
+  
+  //State for timer
   const [counter, setCounter] = useState(0);
   const [seconds, setSeconds] = useState('00');
   const [minutes, setMinutes] = useState('00');
   const [hours, setHours] = useState('00');
   const [isActive, setIsActive] = useState(false);
 
-   // State for wait between clicks
-   const [waitCounter, setWaitCounter] = useState(0);
-   const [isActiveWait, setIsActiveWait] = useState(false);
-   const [amountClick, setAmountClick] = useState(0);
+  // State for wait between clicks
+  const [waitCounter, setWaitCounter] = useState(0);
+  const [isActiveWait, setIsActiveWait] = useState(false);
+  const [amountClick, setAmountClick] = useState(0);
 
-     // Interval between clicks
+  // Interval between clicks
   useEffect(() => {
     const stream$ = new Subject();
     interval(10)

@@ -17,34 +17,6 @@ const Timer = () => {
   const [isActiveWait, setIsActiveWait] = useState(false);
   const [amountClick, setAmountClick] = useState(0);
 
-  const handleStart = () => {
-      setIsActive(true);
-  }
-  const handleStop = () => {
-      setIsActive(false);
-      setIsActiveWait(false);
-      setWaitCounter(0);
-      setCounter(0);
-      setSeconds('00');
-      setMinutes('00');
-      setHours('00');
-  }
-
-  const handleWait = () => {
-    setAmountClick(amountClick => amountClick + 1)
-    if (amountClick >= 1 && waitCounter < TIME_BETWEEN_CLICKS) {
-      setIsActive(false);
-    }
-    setIsActiveWait(true);
-  }
-  const handleReset = () => {
-    setCounter(0);
-    setSeconds('00');
-    setMinutes('00');
-    setHours('00');
-    setIsActive(true)
-  }
-
   // Interval between clicks
   useEffect(() => {
     let intervalBetweenClicks;
@@ -79,6 +51,36 @@ const Timer = () => {
     }
     return () => clearInterval(timerInterval);
   }, [isActive, counter])
+
+  const handleStart = () => {
+    setIsActive(true);
+  }
+
+  const handleStop = () => {
+    setIsActive(false);
+    setIsActiveWait(false);
+    setWaitCounter(0);
+    setCounter(0);
+    setSeconds('00');
+    setMinutes('00');
+    setHours('00');
+  }
+
+  const handleWait = () => {
+    setAmountClick(amountClick => amountClick + 1)
+    if (amountClick >= 1 && waitCounter < TIME_BETWEEN_CLICKS) {
+      setIsActive(false);
+    }
+    setIsActiveWait(true);
+  }
+  
+  const handleReset = () => {
+    setCounter(0);
+    setSeconds('00');
+    setMinutes('00');
+    setHours('00');
+    setIsActive(true)
+  }
 
   return (
     <div className={styles.Wrapper}>
