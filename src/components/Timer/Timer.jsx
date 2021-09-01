@@ -82,7 +82,7 @@ const Timer = () => {
 
   return (
     <div className={styles.Wrapper}>
-        <h2 className={styles.Title}>Timer</h2>
+        <h2 className={styles.Title}>Timer React</h2>
         <div className={styles.Timer}>
             <div className={styles.Item}>
                 <p>{hours}</p>

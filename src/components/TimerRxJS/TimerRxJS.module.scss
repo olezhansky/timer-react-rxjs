@@ -11,6 +11,10 @@
   font-weight: 700;
   letter-spacing: 1px;
   color: #fff;
+  @media (max-width: 480px) {
+    font-size: 24px;
+    line-height: 28px;
+  }
 }
 .Timer {
   margin-top: 15px;
@@ -18,17 +22,24 @@
   width: 700px;
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    max-width: 320px;
+    padding: 0px;
+  }
 }
 .Item {
   display: flex;
   flex-direction: column;
   align-items: center;
-
   h2 {
     font-size: 40px;
     line-height: 44px;
     font-weight: 700;
     color: #fff;
+    @media (max-width: 480px) {
+      font-size: 24px;
+      line-height: 28px;
+    }
   }
   p {
     font-size: 40px;
@@ -44,6 +55,9 @@
   padding: 10px;
   display: flex;
   justify-content: space-between;
+  @media (max-width: 768px) {
+    max-width: 320px;
+  }
   button {
     padding: 5px 10px;
     cursor: pointer;
